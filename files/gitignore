@@ -1,2 +1,13 @@
 *
 !.gitignore
+
+!proc
+proc/*
+!proc/cpuinfo
+!proc/meminfo
+!proc/diskstats
+
+!etc
+etc/*
+!etc/issue
+!etc/os-release
