@@ -5,6 +5,7 @@ export GOPATH
 deploy:
 	ssh root@app0252 systemctl stop cco.golang.service
 	ssh root@app0253 systemctl stop cco.golang.service
+	go fmt src/app/*.go
 	go build -v app
 	scp app root@app0252:/home/isucon/webapp/go/app
 	scp app root@app0253:/home/isucon/webapp/go/app
