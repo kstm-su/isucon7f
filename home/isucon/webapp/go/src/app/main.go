@@ -13,6 +13,10 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 	"github.com/jmoiron/sqlx"
+	"github.com/parnurzeal/gorequest"
+
+	"net"
+	_ "net/http/pprof"
 )
 
 var (
@@ -77,6 +81,13 @@ func initDB() {
 
 }
 
+func getAllInitializeHandler(w http.ResponseWriter, r *http.Request) {
+	gorequest.New().Get("http://app0251.isu7f.k0y.org:5000/sync/initialize").End()
+	gorequest.New().Get("http://app0252.isu7f.k0y.org:5000/sync/initialize").End()
+	gorequest.New().Get("http://app0253.isu7f.k0y.org:5000/sync/initialize").End()
+	gorequest.New().Get("http://app0254.isu7f.k0y.org:5000/sync/initialize").End()
+}
+
 func getInitializeHandler(w http.ResponseWriter, r *http.Request) {
 	db.MustExec("TRUNCATE TABLE adding")
 	db.MustExec("TRUNCATE TABLE buying")
@@ -123,11 +134,15 @@ func wsGameHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	l, _ := net.Listen("tcp", ":5001")
+	go http.Serve(l, nil)
+
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	initDB()
 
 	r := mux.NewRouter()
-	r.HandleFunc("/initialize", getInitializeHandler)
+	r.HandleFunc("/sync/initialize", getInitializeHandler)
+	r.HandleFunc("/initialize", getAllInitializeHandler)
 	r.HandleFunc("/room/", getRoomHandler)
 	r.HandleFunc("/room/{room_name}", getRoomHandler)
 	r.HandleFunc("/ws/", wsGameHandler)

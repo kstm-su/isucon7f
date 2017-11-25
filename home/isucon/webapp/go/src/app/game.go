@@ -122,12 +122,7 @@ func big2exp(n *big.Int) Exponential {
 }
 
 func getCurrentTime() (int64, error) {
-	var currentTime int64
-	err := db.Get(&currentTime, "SELECT floor(unix_timestamp(current_timestamp(3))*1000)")
-	if err != nil {
-		return 0, err
-	}
-	return currentTime, nil
+	return time.Now().UnixNano() / 1000000, nil
 }
 
 // 部屋のロックを取りタイムスタンプを更新する

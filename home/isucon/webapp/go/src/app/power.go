@@ -1,6 +1,7 @@
 package main
 
 import (
+	//	"log"
 	"math/big"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -9,6 +10,8 @@ import (
 func Mul(s, t *big.Int) *big.Int {
 	sBit := s.BitLen()
 	tBit := t.BitLen()
+	//	log.Println("sBit= ", sBit)
+	//	log.Println("tBit= ", tBit)
 	sMove := uint(0)
 	tMove := uint(0)
 	if sBit > prec {
@@ -84,9 +87,10 @@ func (item *mItem) GetPrice(count int) *big.Int {
 
 	s := big.NewInt(c*x + 1)
 	t := new(big.Int).Exp(big.NewInt(d), big.NewInt(a*x+b), nil)
+
 	return new(big.Int).Mul(s, t)
+	//return Mul(s, t)
 	/*
-		//return Mul(s, t)
 		sBit := s.BitLen()
 		tBit := t.BitLen()
 		sMove := 0
