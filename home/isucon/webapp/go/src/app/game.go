@@ -575,7 +575,7 @@ func serveGameConn(ws *websocket.Conn, roomName string) {
 		}
 	}()
 
-	ticker := time.NewTicker(500 * time.Millisecond)
+	ticker := time.NewTicker(700 * time.Millisecond)
 	defer ticker.Stop()
 
 	for {
