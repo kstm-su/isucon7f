@@ -30,9 +30,6 @@ func initDB() {
 		db_port = "3306"
 	}
 	db_sock := os.Getenv("ISU_DB_SOCK")
-	if db_sock == "" {
-		db_sock = "/var/run/mysqld/mysqld.sock"
-	}
 	db_user := os.Getenv("ISU_DB_USER")
 	if db_user == "" {
 		db_user = "root"
@@ -42,9 +39,14 @@ func initDB() {
 		db_password = ":" + db_password
 	}
 
-	//dsn := fmt.Sprintf("%s%s@tcp(%s:%s)/isudb?parseTime=true&loc=Local&charset=utf8mb4",
-	dsn := fmt.Sprintf("%s%s@unix(%s)/isudb?parseTime=true&loc=Local&charset=utf8mb4",
-		db_user, db_password, db_sock)
+	var dsn string
+	if db_sock == "" {
+		dsn = fmt.Sprintf("%s%s@tcp(%s:%s)/isudb?parseTime=true&loc=Local&charset=utf8mb4",
+			db_user, db_password, db_host, db_port)
+	} else {
+		dsn = fmt.Sprintf("%s%s@unix(%s)/isudb?parseTime=true&loc=Local&charset=utf8mb4",
+			db_user, db_password, db_sock)
+	}
 
 	log.Printf("Connecting to db: %q", dsn)
 	db, _ = sqlx.Connect("mysql", dsn)
