@@ -115,3 +115,11 @@ etc/*
 /home/isucon/webapp/go/src/app/*
 !/home/isucon/webapp/go/src/app/power.go
 
+# /home/isucon/env.sh
+/*
+!/home
+/home/*
+!/home/isucon
+/home/isucon/*
+!/home/isucon/env.sh
+
