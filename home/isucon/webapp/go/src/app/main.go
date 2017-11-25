@@ -18,6 +18,7 @@ import (
 var (
 	db     *sqlx.DB
 	MItems map[int]mItem
+	prec   = 70
 )
 
 func initDB() {
