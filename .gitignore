@@ -11,3 +11,11 @@ proc/*
 etc/*
 !etc/issue
 !etc/os-release
+# /etc/mysql/my.cnf
+/*
+!/etc
+/etc/*
+!/etc/mysql
+/etc/mysql/*
+!/etc/mysql/my.cnf
+
