@@ -29,3 +29,11 @@ etc/*
 /var/log/mysql/*
 !/var/log/mysql/slowdump.log
 
+# /etc/redis/redis.conf
+/*
+!/etc
+/etc/*
+!/etc/redis
+/etc/redis/*
+!/etc/redis/redis.conf
+
