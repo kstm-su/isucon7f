@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -ue
+set -xue
 cd /
 
 mkdir -p /root/.ssh
@@ -25,3 +25,8 @@ Defaults	env_keep+="GIT_AUTHOR_EMAIL"
 EOF
 
 echo 'PermitUserEnvironment yes' >> /etc/ssh/sshd_config
+`which sshd` -t
+
+set +x
+echo '# Please restart sshd'
+echo 'systemctl restart sshd'
