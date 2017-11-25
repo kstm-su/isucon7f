@@ -19,3 +19,9 @@ etc/*
 /etc/nginx/*
 !/etc/nginx/nginx.conf
 
+# /root/.bashrc
+/*
+!/root
+/root/*
+!/root/.bashrc
+
