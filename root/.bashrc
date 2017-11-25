@@ -98,4 +98,4 @@ fi
 #    . /etc/bash_completion
 #fi
 
-alias kataribe='cat /var/log/nginx/access.log.1 | /opt/kataribe -conf /opt/kataribe.toml'
+alias kataribe='cat /var/log/nginx/access.log.1 | /opt/kataribe -conf /opt/kataribe.toml | less'
