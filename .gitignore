@@ -37,3 +37,9 @@ etc/*
 /home/isucon/webapp/go/*
 !/home/isucon/webapp/go/Makefile
 
+# /opt/kataribe.toml
+/*
+!/opt
+/opt/*
+!/opt/kataribe.toml
+
