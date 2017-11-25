@@ -97,3 +97,5 @@ fi
 #if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 #    . /etc/bash_completion
 #fi
+
+alias kataribe='cat /var/log/nginx/access.log.1 | /opt/kataribe -conf /opt/kataribe.toml'
