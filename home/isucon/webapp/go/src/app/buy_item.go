@@ -1,3 +1,10 @@
+package main
+
+import (
+	"log"
+	"math/big"
+)
+
 func buyItem(roomName string, itemID int, countBought int, reqTime int64) bool {
 	tx, err := db.Beginx()
 	if err != nil {
@@ -35,6 +42,7 @@ func buyItem(roomName string, itemID int, countBought int, reqTime int64) bool {
 
 	for _, a := range addings {
 		totalMilliIsu.Add(totalMilliIsu, new(big.Int).Mul(str2big(a.Isu), big.NewInt(1000)))
+		//totalMilliIsu.Add(totalMilliIsu, Mul(str2big(a.Isu), big.NewInt(1000)))
 	}
 
 	var buyings []Buying
@@ -49,9 +57,11 @@ func buyItem(roomName string, itemID int, countBought int, reqTime int64) bool {
 		//tx.Get(&item, "SELECT * FROM m_item WHERE item_id = ?", b.ItemID)
 		item := MItems[b.ItemID]
 		cost := new(big.Int).Mul(item.GetPrice(b.Ordinal), big.NewInt(1000))
+		//cost := Mul(item.GetPrice(b.Ordinal), big.NewInt(1000))
 		totalMilliIsu.Sub(totalMilliIsu, cost)
 		if b.Time <= reqTime {
 			gain := new(big.Int).Mul(item.GetPower(b.Ordinal), big.NewInt(reqTime-b.Time))
+			//gain := Mul(item.GetPower(b.Ordinal), big.NewInt(reqTime-b.Time))
 			totalMilliIsu.Add(totalMilliIsu, gain)
 		}
 	}
@@ -60,6 +70,7 @@ func buyItem(roomName string, itemID int, countBought int, reqTime int64) bool {
 	//tx.Get(&item, "SELECT * FROM m_item WHERE item_id = ?", itemID)
 	item := MItems[itemID]
 	need := new(big.Int).Mul(item.GetPrice(countBought+1), big.NewInt(1000))
+	//need := Mul(item.GetPrice(countBought+1), big.NewInt(1000))
 	if totalMilliIsu.Cmp(need) < 0 {
 		log.Println("not enough")
 		tx.Rollback()
@@ -80,4 +91,3 @@ func buyItem(roomName string, itemID int, countBought int, reqTime int64) bool {
 
 	return true
 }
-

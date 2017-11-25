@@ -1,16 +1,7 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"log"
 	"math/big"
-	"strconv"
-	"time"
-
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/websocket"
-	"github.com/jmoiron/sqlx"
 )
 
 func calcStatus(currentTime int64, mItems map[int]mItem, addings []Adding, buyings []Buying) (*GameStatus, error) {
@@ -41,6 +32,7 @@ func calcStatus(currentTime int64, mItems map[int]mItem, addings []Adding, buyin
 		// adding は adding.time に isu を増加させる
 		if a.Time <= currentTime {
 			totalMilliIsu.Add(totalMilliIsu, new(big.Int).Mul(str2big(a.Isu), big.NewInt(1000)))
+			//totalMilliIsu.Add(totalMilliIsu, Mul(str2big(a.Isu), big.NewInt(1000)))
 		} else {
 			addingAt[a.Time] = a
 		}
@@ -51,11 +43,13 @@ func calcStatus(currentTime int64, mItems map[int]mItem, addings []Adding, buyin
 		itemBought[b.ItemID]++
 		m := mItems[b.ItemID]
 		totalMilliIsu.Sub(totalMilliIsu, new(big.Int).Mul(m.GetPrice(b.Ordinal), big.NewInt(1000)))
+		//totalMilliIsu.Sub(totalMilliIsu, Mul(m.GetPrice(b.Ordinal), big.NewInt(1000)))
 
 		if b.Time <= currentTime {
 			itemBuilt[b.ItemID]++
 			power := m.GetPower(itemBought[b.ItemID])
 			totalMilliIsu.Add(totalMilliIsu, new(big.Int).Mul(power, big.NewInt(currentTime-b.Time)))
+			//totalMilliIsu.Add(totalMilliIsu, Mul(power, big.NewInt(currentTime-b.Time)))
 			totalPower.Add(totalPower, power)
 			itemPower[b.ItemID].Add(itemPower[b.ItemID], power)
 		} else {
@@ -69,6 +63,7 @@ func calcStatus(currentTime int64, mItems map[int]mItem, addings []Adding, buyin
 		price := m.GetPrice(itemBought[m.ItemID] + 1)
 		itemPrice[m.ItemID] = price
 		if 0 <= totalMilliIsu.Cmp(new(big.Int).Mul(price, big.NewInt(1000))) {
+			//if 0 <= totalMilliIsu.Cmp(Mul(price, big.NewInt(1000))) {
 			itemOnSale[m.ItemID] = 0 // 0 は 時刻 currentTime で購入可能であることを表す
 		}
 	}
@@ -90,6 +85,7 @@ func calcStatus(currentTime int64, mItems map[int]mItem, addings []Adding, buyin
 		if a, ok := addingAt[t]; ok {
 			updated = true
 			totalMilliIsu.Add(totalMilliIsu, new(big.Int).Mul(str2big(a.Isu), big.NewInt(1000)))
+			//totalMilliIsu.Add(totalMilliIsu, Mul(str2big(a.Isu), big.NewInt(1000)))
 		}
 
 		// 時刻 t で発生する buying を計算する
@@ -127,6 +123,7 @@ func calcStatus(currentTime int64, mItems map[int]mItem, addings []Adding, buyin
 				continue
 			}
 			if 0 <= totalMilliIsu.Cmp(new(big.Int).Mul(itemPrice[itemID], big.NewInt(1000))) {
+				//if 0 <= totalMilliIsu.Cmp(Mul(itemPrice[itemID], big.NewInt(1000))) {
 				itemOnSale[itemID] = t
 			}
 		}
@@ -164,4 +161,3 @@ func calcStatus(currentTime int64, mItems map[int]mItem, addings []Adding, buyin
 		OnSale:   gsOnSale,
 	}, nil
 }
-

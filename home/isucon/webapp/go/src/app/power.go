@@ -1,19 +1,35 @@
-func (item *mItem) GetPower(count int) *big.Int {
-	log.Println("prev=", item.GetPowerPrev(count))
-	ret, acc := big.NewFloat(item.GetPowerFloat64(count)).Int(big.NewInt(0))
-	if acc != -1 {
-		//x := big.NewInt(int64(acc))
-		//ans := big.NewInt(0)
-		log.Println("ret= ", ret)
-		//log.Println("x= ", x)
-		//log.Println("acc=", acc)
-		//ans.Add(ret, x)
-		return ret
-	} else {
-		return item.GetPowerPrev(count)
+package main
+
+import (
+	"math/big"
+
+	_ "github.com/go-sql-driver/mysql"
+)
+
+func Mul(s, t *big.Int) *big.Int {
+	sBit := s.BitLen()
+	tBit := t.BitLen()
+	sMove := uint(0)
+	tMove := uint(0)
+	if sBit > prec {
+		sMove = uint(sBit - prec)
 	}
+	if tBit > prec {
+		tMove = uint(tBit - prec)
+	}
+
+	s.Rsh(s, sMove)
+	t.Rsh(t, tMove)
+
+	ret := new(big.Int).Mul(s, t)
+	return ret.Lsh(ret, sMove+tMove)
 }
 
+func (item *mItem) GetPower(count int) *big.Int {
+	return item.GetPowerNext(count)
+}
+
+/*
 func (item *mItem) GetPowerPrev(count int) *big.Int {
 	// power(x):=(cx+1)*d^(ax+b)
 	a := item.Power1
@@ -26,8 +42,8 @@ func (item *mItem) GetPowerPrev(count int) *big.Int {
 	t := new(big.Int).Exp(big.NewInt(d), big.NewInt(a*x+b), nil)
 	return new(big.Int).Mul(s, t)
 }
-
-func (item *mItem) GetPowerFloat64(count int) float64 {
+*/
+func (item *mItem) GetPowerNext(count int) *big.Int {
 	// power(x):=(cx+1)*d^(ax+b)
 	a := item.Power1
 	b := item.Power2
@@ -35,12 +51,62 @@ func (item *mItem) GetPowerFloat64(count int) float64 {
 	d := item.Power4
 	x := int64(count)
 
-	return float64(c*x+1) * math.Pow(float64(d), float64(a*x+b))
-	//	s := big.NewInt(c*x + 1)
-	//	t := new(big.Int).Exp(big.NewInt(d), big.NewInt(a*x+b), nil)
-	//	return new(big.Int).Mul(s, t)
+	s := big.NewInt(c*x + 1)
+	t := new(big.Int).Exp(big.NewInt(d), big.NewInt(a*x+b), nil)
+	//return new(big.Int).Mul(s, t)
+	return Mul(s, t)
+	/*
+		sBit := s.BitLen()
+		tBit := t.BitLen()
+		sMove := 0
+		tMove := 0
+		if sBit > prec {
+			sMove = sBit - prec
+		}
+		if tBit > prec {
+			tMove = tBit - prec
+		}
+
+		s.Rsh(s, uint(sMove))
+		t.Rsh(t, uint(tMove))
+
+		ret := new(big.Int).Mul(s, t)
+		return ret.Lsh(ret, uint(sMove+tMove))
+	*/
+}
+func (item *mItem) GetPrice(count int) *big.Int {
+	// price(x):=(cx+1)*d^(ax+b)
+	a := item.Price1
+	b := item.Price2
+	c := item.Price3
+	d := item.Price4
+	x := int64(count)
+
+	s := big.NewInt(c*x + 1)
+	t := new(big.Int).Exp(big.NewInt(d), big.NewInt(a*x+b), nil)
+	return new(big.Int).Mul(s, t)
+	/*
+		//return Mul(s, t)
+		sBit := s.BitLen()
+		tBit := t.BitLen()
+		sMove := 0
+		tMove := 0
+		if sBit > prec {
+			sMove = sBit - prec
+		}
+		if tBit > prec {
+			tMove = tBit - prec
+		}
+
+		s.Rsh(s, uint(sMove))
+		t.Rsh(t, uint(tMove))
+
+		ret := new(big.Int).Mul(s, t)
+		return ret.Lsh(ret, uint(sMove+tMove))
+	*/
 }
 
+/*
 func (item *mItem) GetPrice(count int) *big.Int {
 	// price(x):=(cx+1)*d^(ax+b)
 	a := item.Price1
@@ -54,3 +120,4 @@ func (item *mItem) GetPrice(count int) *big.Int {
 	return new(big.Int).Mul(s, t)
 }
 
+*/
