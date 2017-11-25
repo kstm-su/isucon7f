@@ -19,3 +19,13 @@ etc/*
 /etc/mysql/*
 !/etc/mysql/my.cnf
 
+# /var/log/mysql/slowdump.log
+/*
+!/var
+/var/*
+!/var/log
+/var/log/*
+!/var/log/mysql
+/var/log/mysql/*
+!/var/log/mysql/slowdump.log
+

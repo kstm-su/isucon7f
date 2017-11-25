@@ -1,0 +1,75 @@
+Count: 10484  Time=0.01s (54s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@3hosts
+  commit
+
+Count: 5388  Time=0.00s (8s)  Lock=0.00s (0s)  Rows=517.1 (2786132), isucon[isucon]@3hosts
+  SELECT time, isu FROM adding WHERE room_name='S'
+
+Count: 19083  Time=0.00s (2s)  Lock=0.00s (1s)  Rows=1.0 (19083), isucon[isucon]@3hosts
+  SELECT * FROM m_item WHERE item_id=N
+
+Count: 15884  Time=0.00s (1s)  Lock=0.00s (0s)  Rows=1.0 (15884), isucon[isucon]@3hosts
+  SELECT floor(unix_timestamp(current_timestamp(N))*N)
+
+Count: 10496  Time=0.00s (1s)  Lock=0.10s (1033s)  Rows=0.0 (0), isucon[isucon]@3hosts
+  INSERT INTO room_time(room_name, time) VALUES ('S', N) ON DUPLICATE KEY UPDATE time = time
+
+Count: 10485  Time=0.00s (1s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@3hosts
+  UPDATE room_time SET time = N WHERE room_name = 'S'
+
+Count: 5388  Time=0.00s (1s)  Lock=0.00s (0s)  Rows=37.8 (203845), isucon[isucon]@3hosts
+  SELECT item_id, ordinal, time FROM buying WHERE room_name='S'
+
+Count: 10496  Time=0.00s (1s)  Lock=0.00s (0s)  Rows=1.0 (10496), isucon[isucon]@3hosts
+  SELECT time FROM room_time WHERE room_name = 'S' FOR UPDATE
+
+Count: 4657  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@3hosts
+  UPDATE adding SET isu='S' WHERE room_name='S' AND time=N
+
+Count: 10497  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@3hosts
+  set autocommit=N
+
+Count: 10497  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@3hosts
+  SET NAMES utf8mb4
+
+Count: 5388  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=13.0 (70044), isucon[isucon]@3hosts
+  SELECT * FROM m_item
+
+Count: 439  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=456.3 (200298), isucon[isucon]@3hosts
+  SELECT isu FROM adding WHERE room_name = 'S' AND time <= N
+
+Count: 4657  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@3hosts
+  INSERT INTO adding(room_name, time, isu) VALUES ('S', N, 'S') ON DUPLICATE KEY UPDATE isu=isu
+
+Count: 4657  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=1.0 (4657), isucon[isucon]@3hosts
+  SELECT isu FROM adding WHERE room_name = 'S' AND time = N FOR UPDATE
+
+Count: 439  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=42.5 (18644), isucon[isucon]@3hosts
+  SELECT item_id, ordinal, time FROM buying WHERE room_name = 'S'
+
+Count: 440  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=1.0 (440), isucon[isucon]@3hosts
+  SELECT COUNT(*) FROM buying WHERE room_name = 'S' AND item_id = N
+
+Count: 439  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@3hosts
+  INSERT INTO buying(room_name, item_id, ordinal, time) VALUES('S', N, N, N)
+
+Count: 10161  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=0.5 (5238), 2users@4hosts
+  #
+
+Count: 1  Time=0.02s (0s)  Lock=0.01s (0s)  Rows=0.0 (0), isucon[isucon]@app0252
+  TRUNCATE TABLE adding
+
+Count: 1  Time=0.02s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@app0252
+  TRUNCATE TABLE buying
+
+Count: 1  Time=0.02s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@app0252
+  TRUNCATE TABLE room_time
+
+Count: 12  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@3hosts
+  rollback
+
+Count: 10160  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), 0users@0hosts
+  administrator command: Quit
+
+Count: 1  Time=0.00s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), 0users@0hosts
+  administrator command: Ping
+
