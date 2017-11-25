@@ -7,6 +7,7 @@ import (
 	"math/big"
 	"strconv"
 	"time"
+	"math"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/websocket"
@@ -114,7 +115,18 @@ func (item *mItem) GetPower(count int) *big.Int {
 	return new(big.Int).Mul(s, t)
 }
 
+
 func (item *mItem) GetPrice(count int) *big.Int {
+	ret, _:=big.NewFloat(item.GetPriceFloat64(count)).Int(big.NewInt(0))
+	//log.Println(ret)
+	//log.Println(item.GetPricex(count))
+	//log.Println(big.NewFloat(item.GetPriceFloat64(count)).Int(big.NewInt(0)))
+	//log.Println()
+	return ret
+}
+
+/*
+func (item *mItem) GetPricex(count int) *big.Int {
 	// price(x):=(cx+1)*d^(ax+b)
 	a := item.Price1
 	b := item.Price2
@@ -125,6 +137,23 @@ func (item *mItem) GetPrice(count int) *big.Int {
 	s := big.NewInt(c*x + 1)
 	t := new(big.Int).Exp(big.NewInt(d), big.NewInt(a*x+b), nil)
 	return new(big.Int).Mul(s, t)
+}
+*/
+
+func (item *mItem) GetPriceFloat64(count int) float64 {
+	// price(x):=(cx+1)*d^(ax+b)
+	a := item.Price1
+	b := item.Price2
+	c := item.Price3
+	d := item.Price4
+	x := int64(count)
+
+	//log.Println("func=",(c*x+1)*d, " ", a*x+b)
+
+	return float64(c*x+1)*math.Pow(float64(d), float64(a*x+b))
+//	s := big.NewInt(c*x + 1)
+//	t := new(big.Int).Exp(big.NewInt(d), big.NewInt(a*x+b), nil)
+//	return new(big.Int).Mul(s, t)
 }
 
 func str2big(s string) *big.Int {

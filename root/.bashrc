@@ -99,3 +99,5 @@ fi
 #fi
 
 alias kataribe='cat /var/log/nginx/access.log.1 | /opt/kataribe -conf /opt/kataribe.toml | less'
+alias iftopl='iftop -i eth1'
+alias iftopg='iftop -i eth0'
