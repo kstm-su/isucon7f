@@ -11,3 +11,11 @@ proc/*
 etc/*
 !etc/issue
 !etc/os-release
+# /etc/redis/redis.conf
+/*
+!/etc
+/etc/*
+!/etc/redis
+/etc/redis/*
+!/etc/redis/redis.conf
+
