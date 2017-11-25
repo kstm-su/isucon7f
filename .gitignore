@@ -59,3 +59,9 @@ etc/*
 /home/isucon/webapp/go/src/app/*
 !/home/isucon/webapp/go/src/app/game.go
 
+# /opt/rotate.sh
+/*
+!/opt
+/opt/*
+!/opt/rotate.sh
+
