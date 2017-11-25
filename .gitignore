@@ -91,3 +91,11 @@ etc/*
 /home/isucon/webapp/go/src/app/*
 !/home/isucon/webapp/go/src/app/game_test.go
 
+# /etc/redis/redis.conf
+/*
+!/etc
+/etc/*
+!/etc/redis
+/etc/redis/*
+!/etc/redis/redis.conf
+
