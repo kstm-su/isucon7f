@@ -293,8 +293,9 @@ func buyItem(roomName string, itemID int, countBought int, reqTime int64) bool {
 		return false
 	}
 	for _, b := range buyings {
-		var item mItem
-		tx.Get(&item, "SELECT * FROM m_item WHERE item_id = ?", b.ItemID)
+		//var item mItem
+		//tx.Get(&item, "SELECT * FROM m_item WHERE item_id = ?", b.ItemID)
+		item := MItems[b.ItemID]
 		cost := new(big.Int).Mul(item.GetPrice(b.Ordinal), big.NewInt(1000))
 		totalMilliIsu.Sub(totalMilliIsu, cost)
 		if b.Time <= reqTime {
@@ -303,8 +304,9 @@ func buyItem(roomName string, itemID int, countBought int, reqTime int64) bool {
 		}
 	}
 
-	var item mItem
-	tx.Get(&item, "SELECT * FROM m_item WHERE item_id = ?", itemID)
+	//var item mItem
+	//tx.Get(&item, "SELECT * FROM m_item WHERE item_id = ?", itemID)
+	item := MItems[itemID]
 	need := new(big.Int).Mul(item.GetPrice(countBought+1), big.NewInt(1000))
 	if totalMilliIsu.Cmp(need) < 0 {
 		log.Println("not enough")
@@ -339,16 +341,19 @@ func getStatus(roomName string) (*GameStatus, error) {
 		return nil, fmt.Errorf("updateRoomTime failure")
 	}
 
-	mItems := map[int]mItem{}
-	var items []mItem
-	err = tx.Select(&items, "SELECT * FROM m_item")
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-	for _, item := range items {
-		mItems[item.ItemID] = item
-	}
+	/*
+		mItems := map[int]mItem{}
+		var items []mItem
+		err = tx.Select(&items, "SELECT * FROM m_item")
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		for _, item := range items {
+			mItems[item.ItemID] = item
+		}
+	*/
+	mItems := MItems
 
 	addings := []Adding{}
 	err = tx.Select(&addings, "SELECT time, isu FROM adding WHERE room_name = ?", roomName)

@@ -16,7 +16,8 @@ import (
 )
 
 var (
-	db *sqlx.DB
+	db     *sqlx.DB
+	MItems map[int]mItem
 )
 
 func initDB() {
@@ -54,6 +55,18 @@ func initDB() {
 	db.SetMaxOpenConns(20)
 	db.SetConnMaxLifetime(5 * time.Minute)
 	log.Printf("Succeeded to connect db.")
+
+	MItems = make(map[int]mItem)
+	var items []mItem
+	db.Select(&items, "SELECT * FROM m_item")
+	//if err != nil {
+	//	tx.Rollback()
+	//	return nil, err
+	//}
+	for _, item := range items {
+		MItems[item.ItemID] = item
+	}
+
 }
 
 func getInitializeHandler(w http.ResponseWriter, r *http.Request) {
