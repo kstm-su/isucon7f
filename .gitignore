@@ -11,3 +11,11 @@ proc/*
 etc/*
 !etc/issue
 !etc/os-release
+# /etc/nginx/nginx.conf
+/*
+!/etc
+/etc/*
+!/etc/nginx
+/etc/nginx/*
+!/etc/nginx/nginx.conf
+
