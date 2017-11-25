@@ -90,11 +90,20 @@ func getRoomHandler(w http.ResponseWriter, r *http.Request) {
 	path := "/ws/" + url.PathEscape(roomName)
 
 	w.Header().Set("Content-Type", "application/json")
+
+	hostNum := 0
+	for _, r := range roomName {
+		hostNum ^= int(r)
+	}
+	wsHostName := fmt.Sprintf("app025%d.isu7f.k0y.org", hostNum%4+1)
+	log.Printf("websocket host name: %s\n", wsHostName)
+
 	json.NewEncoder(w).Encode(struct {
 		Host string `json:"host"`
 		Path string `json:"path"`
 	}{
-		Host: "",
+		//Host: "",
+		Host: wsHostName,
 		Path: path,
 	})
 }
